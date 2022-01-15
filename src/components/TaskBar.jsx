@@ -11,7 +11,7 @@ import {
 } from "react95";
 import logoIMG from "../assets/images/logo.png";
 
-export default function Footer() {
+export default function TaskBar() {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -22,7 +22,7 @@ export default function Footer() {
           "rgb(254, 254, 254) rgb(10, 10, 10) rgb(10, 10, 10) rgb(254, 254, 254)",
         boxShadow:
           "rgb(223 223 223) 1px 1px 0px 1px inset, rgb(132 133 132) -1px -1px 0px 1px inset",
-        justifyContent: "space-between",
+        justifyContent: "start",
         position: "fixed",
         left: 0,
         bottom: 0,
@@ -76,7 +76,7 @@ export default function Footer() {
       </div>
 
       <TextField
-        style={{ marginRight: 10 }}
+        style={{ marginLeft: 10 }}
         placeholder="Search..."
         width={150}
       />

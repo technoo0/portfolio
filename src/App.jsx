@@ -8,7 +8,7 @@ import original from "react95/dist/themes/original";
 import ms_sans_serif from "react95/dist/fonts/ms_sans_serif.woff2";
 import ms_sans_serif_bold from "react95/dist/fonts/ms_sans_serif_bold.woff2";
 
-import Footer from "./components/Footer";
+import TaskBar from "./components/TaskBar";
 
 import Desktop from "./components/desktop/Desktop";
 
@@ -28,6 +28,9 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: 'ms_sans_serif';
   }
+  h1 {
+    font-family: 'ms_sans_serif';
+  }
   ${styleReset}
 `;
 
@@ -35,14 +38,8 @@ const App = () => (
   <div>
     <GlobalStyles />
     <ThemeProvider theme={original}>
-      {/* <List>
-        <ListItem>🎤 Sing</ListItem>
-        <ListItem>💃🏻 Dance</ListItem>
-        <Divider />
-        <ListItem disabled>😴 Sleep</ListItem>
-      </List> */}
       <Desktop />
-      <Footer />
+      <TaskBar />
     </ThemeProvider>
   </div>
 );
