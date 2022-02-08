@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import useStore from "../store";
 import {
   AppBar,
   Toolbar,
@@ -10,12 +11,37 @@ import {
   Divider,
 } from "react95";
 import logoIMG from "../assets/images/logo.png";
+import TimeWidget from "./TimeWidget";
 
-export default function TaskBar() {
+export default function TaskBar({}) {
   const [open, setOpen] = React.useState(false);
+  const IconRef = useRef();
+  const ToolbarRef = useRef();
+  const [ShowName, setShowName] = useState(true);
+  const windowsStack = useStore((state) => state.windowsStack);
+  useEffect(() => {
+    const Resize = () => {
+      if (IconRef.current && IconRef.current.children[0]) {
+        if (IconRef.current.children[0].offsetWidth < 105) {
+          setShowName(false);
+        } else {
+          setShowName(true);
+        }
+      }
+    };
+    Resize();
+    window.addEventListener("resize", Resize);
+    return () => {
+      window.removeEventListener("resize", Resize);
+    };
+  }, [windowsStack]);
+
+  const maxIndex = useStore((state) => state.maxIndex);
+  const MoveToTop = useStore((state) => state.MoveToTop);
 
   return (
     <Toolbar
+      ref={ToolbarRef}
       style={{
         background: "rgb(198, 198, 198)",
         borderColor:
@@ -34,12 +60,15 @@ export default function TaskBar() {
         <Button
           onClick={() => setOpen(!open)}
           active={open}
-          style={{ fontWeight: "bold" }}
+          style={{ fontFamily: "ms_sans_serif", fontWeight: "bold" }}
         >
           <img
             src={logoIMG}
             alt="react95 logo"
-            style={{ height: "20px", marginRight: 4 }}
+            style={{
+              height: "20px",
+              marginRight: 4,
+            }}
           />
           Start
         </Button>
@@ -74,12 +103,47 @@ export default function TaskBar() {
           </List>
         )}
       </div>
+      <div
+        ref={IconRef}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "start",
+          width: "90.5vw",
+          maxHeight: "40px",
+          overflowX: "auto",
+          overflowY: "hidden",
+        }}
+      >
+        {windowsStack.map((item, key) => (
+          <Button
+            active={item.index == maxIndex - 1 && !item.minimized}
+            key={key}
+            onClick={() => {
+              if (item.index != maxIndex - 1) {
+                MoveToTop(item.id);
+              } else {
+                const MinmizeWindow = useStore.getState().MinmizeWindow;
+                MinmizeWindow(item.id);
+              }
 
-      <TextField
-        style={{ marginLeft: 10 }}
-        placeholder="Search..."
-        width={150}
-      />
+              // console.log("pressed" + item.id);
+            }}
+            style={{
+              fontWeight: "bold",
+              fontFamily: "ms_sans_serif",
+              width: "200px",
+              textAlign: "left",
+              justifyContent: ShowName ? "start" : "center",
+              marginLeft: "10px",
+            }}
+          >
+            👨‍💻 {ShowName ? item.name : ""}
+          </Button>
+        ))}
+      </div>
+
+      <TimeWidget />
     </Toolbar>
   );
 }

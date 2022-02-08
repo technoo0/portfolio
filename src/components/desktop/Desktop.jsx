@@ -7,38 +7,24 @@ import useStore from "../../store";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 import Window from "./windows/window";
 
-export default function Desktop() {
-  const DesktopRef = useRef(null);
-
+export default function Desktop({ Dref }) {
   const windowsStack = useStore((state) => state.windowsStack);
-  const Lisner = () => {
-    useStore.setState({
-      DesktopSize: [
-        DesktopRef.current.offsetWidth,
-        DesktopRef.current.offsetHeight - 40,
-      ],
-    });
-  };
-  useEffect(() => {
-    Lisner();
-    window.addEventListener("resize", Lisner);
-    return () => {
-      window.removeEventListener("resize", Lisner);
-    };
-  }, []);
+
   const Items = [
     {
+      id: 0,
       name: "My Computer",
       logo: mycomputerIcon,
     },
     {
+      id: 1,
       name: "Recycle Bin",
       logo: Trash,
     },
   ];
   return (
     <div
-      ref={DesktopRef}
+      ref={Dref}
       style={{ maxWidth: "100vw", minHeight: "95vh", maxHeight: "100vh" }}
     >
       <ResponsiveGridLayout
@@ -63,11 +49,10 @@ export default function Desktop() {
       >
         {Items.map((item, index) => (
           <div key={String(index)}>
-            <Icon name={item.name} logo={item.logo} />
+            <Icon name={item.name} logo={item.logo} id={item.id} />
           </div>
         ))}
       </ResponsiveGridLayout>
-
       {windowsStack.map((item, key) => (
         <Window key={key} data={item} />
       ))}

@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useStore from "../../store";
 import useLongPress from "../../useLongPress";
+import { useContextMenu } from "../hooks/useContextMenu";
+import ContextMenu from "./ContextMenu";
 export default function Icon(props) {
+  const [ElementRef, showMenu] = useContextMenu();
+
   const AddWindow = useStore((state) => state.AddWindow);
   const onLongPress = () => {
     AddWindow();
   };
 
   const onClick = () => {
-    console.log("click is triggered");
+    // console.log("click is triggered");
   };
 
   const defaultOptions = {
@@ -18,6 +22,7 @@ export default function Icon(props) {
   const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
   return (
     <div
+      ref={ElementRef}
       {...longPressEvent}
       onDoubleClick={AddWindow}
       style={{
@@ -33,7 +38,7 @@ export default function Icon(props) {
         width={40}
         style={{ margin: "auto" }}
       />
-      <h1
+      <p
         style={{
           fontFamily: "ms_sans_serif",
           fontSize: "14px",
@@ -42,7 +47,8 @@ export default function Icon(props) {
         }}
       >
         {props.name}
-      </h1>
+      </p>
+      {showMenu ? <ContextMenu /> : ""}
     </div>
   );
 }

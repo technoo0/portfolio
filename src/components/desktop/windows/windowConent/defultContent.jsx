@@ -22,9 +22,9 @@ export default function DefultContent(props) {
           tho!)
         </p>
       </WindowContent>
-      <Panel variant="well" className="footer">
+      {/* <Panel variant="well" className="footer">
         Put some useful informations here
-      </Panel>
+      </Panel> */}
     </div>
   );
 }
