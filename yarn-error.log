@@ -1,0 +1,47 @@
+Arguments: 
+  E:\Program Files\nodejs\node.exe C:\Users\Marwan\.node\corepack\yarn\1.22.15\bin\yarn.js add react-scrollmagic
+
+PATH: 
+  C:\Python310\Scripts\;C:\Python310\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;E:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;E:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;E:\programes\Android\sdk;E:\programes\Android\sdk\platform-tools;E:\programes\Android\sdk\tools;E:\programes\aconda;E:\programes\aconda\Library\mingw-w64\bin;E:\programes\aconda\Library\usr\bin;E:\programes\aconda\Library\bin;E:\programes\aconda\Scripts;E:\Program Files\python\Scripts\;E:\Program Files\python\;C:\Users\Marwan\AppData\Local\Microsoft\WindowsApps;E:\Program Files\Microsoft VS Code\bin;E:\Program Files\heroku\bin;E:\downlaod\chromedriver_win32 (1);C:\Users\Marwan\AppData\Roaming\npm;C:\Users\Marwan\AppData\Local\GitHubDesktop\bin;E:\Programs\mongosh\;E:\programes\Android\sdk;E:\programes\Android\sdk\tools;E:\programes\Android\sdk\platform-tools;
+
+Yarn version: 
+  1.22.15
+
+Node version: 
+  16.13.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'D:\NewProjects\portfolio\node_modules\esbuild-windows-64\esbuild.exe'
+
+npm manifest: 
+  {
+    "name": "portfolio",
+    "version": "0.0.0",
+    "scripts": {
+      "dev": "vite --host",
+      "build": "vite build",
+      "preview": "vite preview"
+    },
+    "dependencies": {
+      "moment": "^2.29.1",
+      "react": "^17.0.2",
+      "react-dom": "^17.0.2",
+      "react-grid-layout": "^1.3.1",
+      "react95": "^3.10.0",
+      "styled-components": "^5.3.3",
+      "zustand": "^3.6.9"
+    },
+    "devDependencies": {
+      "@vitejs/plugin-react": "^1.0.7",
+      "vite": "^2.7.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

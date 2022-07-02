@@ -4,6 +4,8 @@
 }
 body {
   font-family: "ms_sans_serif";
+  background-color: rgb(0, 128, 128);
+  overflow: hidden;
 }
 
 * {

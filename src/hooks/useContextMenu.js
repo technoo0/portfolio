@@ -8,7 +8,7 @@ export const useContextMenu = () => {
     setShowMenu(true);
   };
   const onClickAway = (e) => {
-    if (!ElementRef.current.contains(e.target)) {
+    if (ElementRef.current && !ElementRef.current.contains(e.target)) {
       if (showMenu) {
         e.preventDefault();
         setShowMenu(false);
@@ -20,7 +20,9 @@ export const useContextMenu = () => {
     window.addEventListener("mousedown", onClickAway);
 
     return () => {
-      ElementRef.current.removeEventListener("contextmenu", OnContextMenu);
+      if (ElementRef.current) {
+        ElementRef.current.removeEventListener("contextmenu", OnContextMenu);
+      }
       window.removeEventListener("mousedown", onClickAway);
     };
   }, [showMenu, setShowMenu]);

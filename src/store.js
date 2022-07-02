@@ -1,22 +1,36 @@
 import create from "zustand";
 
-const useStore = create((set) => ({
+const useStore = create((set, get) => ({
   DestopSize: [1920, 937],
   maxIndex: 1,
   windowsStack: [],
-  AddWindow: () =>
+  spwanMargin: -4,
+  AddMatgin: () => {
+    const spwanMarginstate = get().spwanMargin;
+    if (spwanMarginstate <= 40) {
+      set((state) => ({ spwanMargin: state.spwanMargin + 8 }));
+    } else {
+      set((state) => ({ spwanMargin: -4 }));
+    }
+  },
+  AddWindow: (name, content) => {
+    const AddMatgin = get().AddMatgin;
+
     set((state) => ({
       windowsStack: [
         ...state.windowsStack,
         {
           id: state.windowsStack.length,
-          name: "window",
+          name: name,
           index: state.maxIndex,
           minimized: false,
+          content: content,
         },
       ],
       maxIndex: state.maxIndex + 1,
-    })),
+    }));
+    AddMatgin();
+  },
   MoveToTop: (windowIndex) =>
     set((state) => ({
       windowsStack: state.windowsStack.map((t) =>

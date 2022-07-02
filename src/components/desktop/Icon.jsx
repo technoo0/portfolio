@@ -1,30 +1,16 @@
 import React, { useEffect } from "react";
 import useStore from "../../store";
-import useLongPress from "../../useLongPress";
-import { useContextMenu } from "../hooks/useContextMenu";
+import { useContextMenu } from "../../hooks/useContextMenu";
 import ContextMenu from "./ContextMenu";
-export default function Icon(props) {
+export default function Icon({ name, logo, content }) {
   const [ElementRef, showMenu] = useContextMenu();
 
   const AddWindow = useStore((state) => state.AddWindow);
-  const onLongPress = () => {
-    AddWindow();
-  };
 
-  const onClick = () => {
-    // console.log("click is triggered");
-  };
-
-  const defaultOptions = {
-    shouldPreventDefault: true,
-    delay: 500,
-  };
-  const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
   return (
     <div
       ref={ElementRef}
-      {...longPressEvent}
-      onDoubleClick={AddWindow}
+      onDoubleClick={() => AddWindow(name, content)}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -32,7 +18,7 @@ export default function Icon(props) {
       }}
     >
       <img
-        src={props.logo}
+        src={logo}
         alt="logo"
         draggable={false}
         width={40}
@@ -46,7 +32,7 @@ export default function Icon(props) {
           textAlign: "center",
         }}
       >
-        {props.name}
+        {name}
       </p>
       {showMenu ? <ContextMenu /> : ""}
     </div>

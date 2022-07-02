@@ -91,11 +91,9 @@ const Wrapper = styled.div`
   }
   .window {
     min-width: 400px;
-    min-height: 200px;
+    min-height: 300px;
   }
-  .window:nth-child(2) {
-    margin: 2rem;
-  }
+
   .footer {
     display: block;
     margin: 0.25rem;
@@ -135,6 +133,7 @@ export default function WindowContaner(props) {
       }));
     }
   };
+
   //----------------------------------- resize useEffect -------------------------------
   useEffect(() => {
     //get the ref of the resize handel
@@ -160,13 +159,19 @@ export default function WindowContaner(props) {
     initwindowSize,
     setinitWindowSize,
   ]);
+
   //----------------------------------- Index and Move functions -------------------------------
 
   const DSize = useStore((state) => state.DesktopSize);
+  const spwanMargin = useStore((state) => state.spwanMargin);
   const [IconPos, setIconPos] = useState([
     DSize[0] / 2 - 400,
     DSize[1] / 2 - 200,
   ]);
+  useEffect(() => {
+    setIconPos([IconPos[0] + spwanMargin, IconPos[1] + spwanMargin]);
+    console.log(IconPos, spwanMargin);
+  }, []);
   const windowsStack = useStore((state) => state.windowsStack);
   const maxIndex = useStore((state) => state.maxIndex);
 
@@ -254,14 +259,15 @@ export default function WindowContaner(props) {
       draggable={false}
       onMouseDown={onMouseDown}
       style={{
+        ...windowSize,
         position: "absolute",
         top: IconPos[1],
         left: IconPos[0],
         zIndex: props.data.index,
-        display: props.data.minimized ? "none" : "block",
+        display: props.data.minimized ? "none" : "",
       }}
     >
-      <Wrapper>
+      <Wrapper style={{ height: "inherit" }}>
         <Window
           resizable={!IsMax}
           ref={windowRef}
@@ -274,9 +280,7 @@ export default function WindowContaner(props) {
             onMouseMove={onMouseMove}
             className="window-header"
           >
-            <span>
-              {props.data.name} {props.data.id} {props.data.index}
-            </span>
+            <span>{props.data.name}</span>
             <div style={{ display: "flex", alignItems: "center" }}>
               <Button
                 onClick={MinmizeCurrentWindow}
@@ -295,7 +299,8 @@ export default function WindowContaner(props) {
               </Button>
             </div>
           </WindowHeader>
-          <DefultContent />
+          {/* <DefultContent /> */}
+          {props.children}
         </Window>
       </Wrapper>
     </div>

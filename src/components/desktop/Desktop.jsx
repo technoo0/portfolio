@@ -7,7 +7,15 @@ import useStore from "../../store";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 import Window from "./windows/window";
 
+import AppsList from "../../apps/appsList";
+import Skills from "../../apps/Skills/Skills";
+import AboutMe from "../../apps/AboutMe/AboutMe";
+
 export default function Desktop({ Dref }) {
+  const Componants = {
+    Skills: <Skills />,
+    AboutMe: <AboutMe />,
+  };
   const windowsStack = useStore((state) => state.windowsStack);
 
   const Items = [
@@ -47,14 +55,22 @@ export default function Desktop({ Dref }) {
         rowHeight={75}
         maxRows={Math.floor(window.innerHeight / 70) - 1}
       >
-        {Items.map((item, index) => (
+        {AppsList.map((item, index) => (
           <div key={String(index)}>
-            <Icon name={item.name} logo={item.logo} id={item.id} />
+            <Icon
+              name={item.name}
+              logo={item.logo}
+              id={item.id}
+              content={item.content}
+            />
           </div>
         ))}
       </ResponsiveGridLayout>
       {windowsStack.map((item, key) => (
-        <Window key={key} data={item} />
+        <Window key={key} data={item}>
+          <item.content />
+          ss
+        </Window>
       ))}
     </div>
   );
