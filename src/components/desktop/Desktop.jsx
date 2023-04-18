@@ -69,7 +69,6 @@ export default function Desktop({ Dref }) {
       {windowsStack.map((item, key) => (
         <Window key={key} data={item}>
           <item.content />
-          ss
         </Window>
       ))}
     </div>

@@ -119,17 +119,32 @@ export default function WindowContaner(props) {
     setResizePostion({ x: e.x, y: e.y });
     setResizeState("on");
   };
+  const ResizeTouchown = (e) => {
+
+    setResizePostion({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+    setResizeState("on");
+  };
 
   const ResizeMouseUp = () => {
+
     setResizeState("off");
     setinitWindowSize(windowSize);
   };
 
   const ResizeMouseMove = (e) => {
+
     if (resizeState == "on") {
       setWindowSize((c) => ({
         width: initwindowSize.width + (e.x - resizePostion.x),
         height: initwindowSize.height + (e.y - resizePostion.y),
+      }));
+    }
+  };
+  const ResizTouchMove = (e) => {
+    if (resizeState == "on") {
+      setWindowSize((c) => ({
+        width: initwindowSize.width + (e.touches[0].clientX - resizePostion.x),
+        height: initwindowSize.height + (e.touches[0].clientY - resizePostion.y),
       }));
     }
   };
@@ -141,13 +156,19 @@ export default function WindowContaner(props) {
       windowRef.current.children[windowRef.current.children.length - 1];
 
     resizeHandel.current.addEventListener("mousedown", ResizeMouseDown);
+    resizeHandel.current.addEventListener("touchstart", ResizeTouchown);
     window.addEventListener("mouseup", ResizeMouseUp);
+    window.addEventListener("touchend", ResizeMouseUp);
     window.addEventListener("mousemove", ResizeMouseMove);
+    window.addEventListener("touchmove", ResizTouchMove);
 
     return () => {
       resizeHandel.current.removeEventListener("mousedown", ResizeMouseDown);
+      resizeHandel.current.removeEventListener("touchstart", ResizeTouchown);
       window.removeEventListener("mouseup", ResizeMouseUp);
+      window.removeEventListener("touchend", ResizeMouseUp);
       window.removeEventListener("mousemove", ResizeMouseMove);
+      window.removeEventListener("touchmove", ResizTouchMove);
     };
   }, [
     resizeState,
@@ -165,12 +186,12 @@ export default function WindowContaner(props) {
   const DSize = useStore((state) => state.DesktopSize);
   const spwanMargin = useStore((state) => state.spwanMargin);
   const [IconPos, setIconPos] = useState([
-    DSize[0] / 2 - 400,
+    DSize[0] / 2 - 200,
     DSize[1] / 2 - 200,
   ]);
   useEffect(() => {
     setIconPos([IconPos[0] + spwanMargin, IconPos[1] + spwanMargin]);
-    console.log(IconPos, spwanMargin);
+    // console.log(IconPos, spwanMargin);
   }, []);
   const windowsStack = useStore((state) => state.windowsStack);
   const maxIndex = useStore((state) => state.maxIndex);
@@ -210,6 +231,7 @@ export default function WindowContaner(props) {
     if (props.data.index != maxIndex - 1) {
       MoveToTop(props.data.id);
     }
+
     setCourserPos([event.nativeEvent.layerX, event.nativeEvent.layerY]);
     if (
       event.target.attributes.name &&
@@ -218,9 +240,28 @@ export default function WindowContaner(props) {
       setMosueDown(true);
     }
   };
+  const onTouchStart = (event) => {
+    const MoveToTop = useStore.getState().MoveToTop;
+
+    if (props.data.index != maxIndex - 1) {
+      MoveToTop(props.data.id);
+    }
+    // console.log("touch down", event)
+    const elePos = event.target.getBoundingClientRect()
+
+    setCourserPos([event.touches[0].pageX - elePos.x, event.touches[0].pageY - elePos.y]);
+    if (
+      event.target.attributes.name &&
+      event.target.attributes.name.value == "hello"
+    ) {
+      setMosueDown(true);
+    }
+  }
+
   const onMouseUp = (event) => {
     setMosueDown(false);
   };
+
   const onMouseMove = (event) => {
     if (event.target.attributes.name) {
       if (MosueDown && event.target.attributes.name.value == "hello") {
@@ -229,17 +270,35 @@ export default function WindowContaner(props) {
     }
   };
 
+  const onTouchMove = (event) => {
+    if (event.target.attributes.name) {
+      if (MosueDown && event.target.attributes.name.value == "hello") {
+        // console.log(event.target.getBoundingClientRect())
+        // console.log(event)
+        onDragEnd(event);
+      }
+    }
+  }
+
   useEffect(() => {
     window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("touchend", onMouseUp);
     return () => {
       window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("touchend", onMouseUp);
     };
   }, [setMosueDown]);
 
   const onDragEnd = (event) => {
     const DesktopSize = useStore.getState().DesktopSize;
     // console.log(DesktopSize);
-    var newPos = [event.pageX - CouserPos[0], event.pageY - CouserPos[1]];
+    var newPos;
+    if (event.pageX) {
+
+      newPos = [event.pageX - CouserPos[0], event.pageY - CouserPos[1]];
+    } else {
+      newPos = [event.touches[0].pageX - CouserPos[0], event.touches[0].pageY - CouserPos[1]];
+    }
     if (newPos[0] < 0) {
       newPos[0] = 0;
     } else if (newPos[0] > DesktopSize[0] - IconRef.current.offsetWidth) {
@@ -258,6 +317,7 @@ export default function WindowContaner(props) {
       ref={IconRef}
       draggable={false}
       onMouseDown={onMouseDown}
+      onTouchStart={onTouchStart}
       style={{
         ...windowSize,
         position: "absolute",
@@ -278,6 +338,7 @@ export default function WindowContaner(props) {
             active={props.data.index == maxIndex - 1}
             name="hello"
             onMouseMove={onMouseMove}
+            onTouchMove={onTouchMove}
             className="window-header"
           >
             <span>{props.data.name}</span>

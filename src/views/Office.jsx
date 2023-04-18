@@ -2,10 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import ScrollMagic from "scrollmagic";
 import VideoPlayer from "./VideoPlayer";
 import UseObjectFit from "../hooks/UseObjectFit";
+import Arrow from "./Arrow.svg"
 export default function Office() {
   let VideRef = useRef();
   const BottonPos = UseObjectFit();
   const [stepOne, setSepOne] = useState(true);
+  const [showbottom, setshowbottom] = useState(true)
+  const [ended, setended] = useState(false);
+
+  const OnEnded = () => {
+    console.log("Video Ended")
+    setended(true);
+  };
+
   const PauseVideo = () => {
     if (VideRef.current.currentTime >= 2) {
       VideRef.current.pause();
@@ -24,24 +33,53 @@ export default function Office() {
       clearInterval(TimeInter);
     };
   }, [stepOne, setSepOne]);
+
+  useEffect(() => {
+    VideRef.current.addEventListener("ended", OnEnded);
+
+
+    return () => {
+      if (VideRef.current) {
+        VideRef.current.removeEventListener("ended", OnEnded);
+      }
+
+    };
+  }, [ended, setended]);
+
   return (
     <div style={{ width: "100%", height: "100vh" }}>
       <VideoPlayer VideRef={VideRef} />
       {!stepOne && (
         <div
-          onClick={() => VideRef.current.play()}
+
           style={{
+            display: showbottom ? "block" : "none",
             position: "absolute",
-            transitionDuration: "2s",
+            // transitionDuration: "2s",
             top: BottonPos.y,
             left: BottonPos.x,
             width: BottonPos.w,
             height: BottonPos.h,
             //   border: "white solid",
-            borderRadius: 5,
-            boxShadow: "0 0 20px 7px #0ff",
+            // borderRadius: 4,
+            // boxShadow: "0 0 20px 7px #0ff",
           }}
-        ></div>
+        >
+          <div
+            onClick={() => { VideRef.current.play(); setshowbottom(false) }}
+            style={{
+              position: "absolute",
+              width: BottonPos.w,
+              height: BottonPos.h,
+              display: "block",
+              // border: "white solid",
+              zIndex: 100
+            }} ></div>
+          <div style={{ position: "absolute", left: -150, top: -150 }} >
+            <img src={Arrow} alt="Your SVG" width={200} />
+          </div>
+        </div>
+
       )}
     </div>
   );

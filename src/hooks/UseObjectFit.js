@@ -24,10 +24,10 @@ function ratio(w, h) {
 
 const GetPostion = (width, height) => {
   return {
-    x: width * (787 / 1920),
-    y: height * (773 / 1080),
-    w: width * (58 / 1920),
-    h: height * (23 / 1080),
+    x: width * (784 / 1920),
+    y: height * (768 / 1080),
+    w: width * (56 / 1920),
+    h: height * (24 / 1080),
   };
 };
 

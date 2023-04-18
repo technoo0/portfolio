@@ -1,11 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useStore from "../../store";
 import { useContextMenu } from "../../hooks/useContextMenu";
 import ContextMenu from "./ContextMenu";
+import { useDoubleTap } from "../../hooks/useDoubleTap";
 export default function Icon({ name, logo, content }) {
-  const [ElementRef, showMenu] = useContextMenu();
 
+  const [ElementRef, showMenu] = useContextMenu();
+  const isDoubleTabed = () => {
+    AddWindow(name, content)
+  }
+  // const TapRaf = useDoubleTap(isDoubleTabed)
   const AddWindow = useStore((state) => state.AddWindow);
+
+
+
+
+  //------------------- Double Tap -------------------
+
+  const [lastTap, setLastTap] = useState(new Date().getTime())
+
+  const onTap = () => {
+
+    var now = new Date().getTime();
+    var timesince = now - lastTap;
+
+    if ((timesince < 400) && (timesince > 0)) {
+      // console.log("doubleTap")
+      isDoubleTabed()
+    }
+
+    setLastTap(now)
+  }
+
+  useEffect(() => {
+    if (ElementRef.current) {
+      ElementRef.current.addEventListener("touchstart", onTap)
+    }
+    return () => {
+      if (ElementRef.current) {
+        ElementRef.current.removeEventListener("touchstart", onTap);
+      }
+    }
+  }, [ElementRef, lastTap])
 
   return (
     <div

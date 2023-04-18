@@ -1,9 +1,34 @@
-import React from "react";
-import { WindowContent, Button, Toolbar, Cutout } from "react95";
-
+import React, { useEffect, useRef, useState } from "react";
+import { WindowContent, Button, Toolbar, Cutout, Panel } from "react95";
+let observer;
 export default function AboutMe(props) {
+  const windowRef = useRef()
+
+  const [windowHight, setWindowHight] = useState(0)
+  const onresize = () => {
+    if (windowRef.current) {
+      setWindowHight(windowRef.current.offsetHeight - 120)
+
+    }
+  }
+  useEffect(() => {
+    if (windowRef.current) {
+      observer = new ResizeObserver(onresize)
+      observer.observe(windowRef.current)
+    }
+    return () => {
+
+      if (observer) {
+
+        observer.disconnect()
+        observer = null
+      }
+
+
+    }
+  }, [windowRef.current, windowHight])
   return (
-    <div style={{ height: "100%" }}>
+    <div style={{ height: "100%" }} ref={windowRef}>
       <Toolbar>
         <Button variant="menu" size="sm">
           File
@@ -15,8 +40,10 @@ export default function AboutMe(props) {
           Save
         </Button>
       </Toolbar>
-      <WindowContent style={{ height: "100%" }}>
-        <Cutout style={{ height: "80%", backgroundColor: "white" }}>
+
+
+      <WindowContent style={{ hight: "100%" }}>
+        <Cutout style={{ backgroundColor: "white", height: windowHight != 0 ? windowHight : "200px", overflow: "hidden" }}>
           <div>
             <p>React95 is the best UI library ever created</p>
             <p>React95 is the best UI library ever created</p>
@@ -31,8 +58,9 @@ export default function AboutMe(props) {
         </Cutout>
       </WindowContent>
       {/* <Panel variant="well" className="footer">
-        Put some useful informations here
-      </Panel> */}
+          Put some useful informations here
+        </Panel> */}
     </div>
+
   );
 }
