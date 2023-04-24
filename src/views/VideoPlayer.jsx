@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import Video from "../assets/video.mp4";
+import Video from "../assets/video2.mp4";
 const VideoPlayer = memo(({ VideRef }) => {
   console.log("render");
   return (

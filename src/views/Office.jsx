@@ -3,7 +3,8 @@ import ScrollMagic from "scrollmagic";
 import VideoPlayer from "./VideoPlayer";
 import UseObjectFit from "../hooks/UseObjectFit";
 import Arrow from "./Arrow.svg"
-export default function Office() {
+import Aduio from "../assets/win95.mp3";
+export default function Office({ onVideoEnded }) {
   let VideRef = useRef();
   const BottonPos = UseObjectFit();
   const [stepOne, setSepOne] = useState(true);
@@ -13,6 +14,7 @@ export default function Office() {
   const OnEnded = () => {
     console.log("Video Ended")
     setended(true);
+    onVideoEnded()
   };
 
   const PauseVideo = () => {
@@ -21,6 +23,15 @@ export default function Office() {
       setSepOne(false);
     }
   };
+
+  const onUserClick = () => {
+    VideRef.current.play();
+    setshowbottom(false);
+    setTimeout(() => {
+      let audio = new Audio(Aduio)
+      audio.play()
+    }, 10000)
+  }
   useEffect(() => {
     console.log(stepOne);
 
@@ -66,7 +77,7 @@ export default function Office() {
           }}
         >
           <div
-            onClick={() => { VideRef.current.play(); setshowbottom(false) }}
+            onClick={onUserClick}
             style={{
               position: "absolute",
               width: BottonPos.w,
