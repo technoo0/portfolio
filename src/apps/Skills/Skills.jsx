@@ -13,7 +13,7 @@ export default function Skills(props) {
     { name: "Linux", icon: "linux" },
     { name: "Next.js", icon: "nextjs" },
     { name: "Postgresql", icon: "postgresql" },
-    { name: "Pyton", icon: "python" },
+    { name: "Python", icon: "python" },
     { name: "React", icon: "react" },
     { name: "Tailwindcss", icon: "tailwindcss" },
     { name: "Three.js", icon: "threejs" },
