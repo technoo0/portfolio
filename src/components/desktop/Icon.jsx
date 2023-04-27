@@ -3,11 +3,11 @@ import useStore from "../../store";
 import { useContextMenu } from "../../hooks/useContextMenu";
 import ContextMenu from "./ContextMenu";
 import { useDoubleTap } from "../../hooks/useDoubleTap";
-export default function Icon({ name, logo, content }) {
+export default function Icon({ name, logo, content, hight, width }) {
 
   const [ElementRef, showMenu] = useContextMenu();
   const isDoubleTabed = () => {
-    AddWindow(name, content)
+    AddWindow(name, content, hight, width)
   }
   // const TapRaf = useDoubleTap(isDoubleTabed)
   const AddWindow = useStore((state) => state.AddWindow);
@@ -46,7 +46,7 @@ export default function Icon({ name, logo, content }) {
   return (
     <div
       ref={ElementRef}
-      onDoubleClick={() => AddWindow(name, content)}
+      onDoubleClick={() => AddWindow(name, content, hight, width)}
       style={{
         display: "flex",
         flexDirection: "column",

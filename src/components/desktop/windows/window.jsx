@@ -109,20 +109,40 @@ export default function WindowContaner(props) {
   const resizeHandel = useRef();
   const [resizePostion, setResizePostion] = useState({ x: 0, y: 0 });
   const [resizeState, setResizeState] = useState("off");
-  const [windowSize, setWindowSize] = useState({ width: 400, height: 200 });
+  const [windowSize, setWindowSize] = useState({ width: props.data.width, height: props.data.hight });
   const [initwindowSize, setinitWindowSize] = useState({
-    width: 400,
-    height: 200,
+    width: props.data.width,
+    height: props.data.hight,
   });
+  useEffect(() => {
+
+    if (windowSize.width > window.outerWidth) {
+      setWindowSize({
+        width: window.outerWidth,
+        height: windowSize.height
+      })
+    }
+
+    if (windowSize.height > window.outerHeight) {
+      setWindowSize({
+        width: windowSize.width,
+        height: window.outerHeight
+      })
+    }
+  }, [])
 
   const ResizeMouseDown = (e) => {
-    setResizePostion({ x: e.x, y: e.y });
-    setResizeState("on");
+    if (!IsMax) {
+
+      setResizePostion({ x: e.x, y: e.y });
+      setResizeState("on");
+    }
   };
   const ResizeTouchown = (e) => {
-
-    setResizePostion({ x: e.touches[0].clientX, y: e.touches[0].clientY });
-    setResizeState("on");
+    if (!IsMax) {
+      setResizePostion({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+      setResizeState("on");
+    }
   };
 
   const ResizeMouseUp = () => {
@@ -131,22 +151,56 @@ export default function WindowContaner(props) {
     setinitWindowSize(windowSize);
   };
 
+
   const ResizeMouseMove = (e) => {
+    let newWidth = initwindowSize.width + (e.x - resizePostion.x)
+    let newHight = initwindowSize.height + (e.y - resizePostion.y)
+    if (newWidth < props.data.width && props.data.width > window.outerWidth) {
+      newWidth = props.data.width
+    }
+    if (newWidth > window.outerWidth) {
+      newWidth = window.outerWidth
+    }
+
+    if (newHight < props.data.hight && props.data.hight > window.outerHeight) {
+      newHight = props.data.hight
+    }
+    if (newHight > window.outerHeight) {
+      newHight = window.outerHeight
+    }
 
     if (resizeState == "on") {
       setWindowSize((c) => ({
-        width: initwindowSize.width + (e.x - resizePostion.x),
-        height: initwindowSize.height + (e.y - resizePostion.y),
+        width: newWidth,
+        height: newHight,
       }));
     }
   };
   const ResizTouchMove = (e) => {
+    let newWidth = initwindowSize.width + (e.touches[0].clientX - resizePostion.x)
+    let newHight = initwindowSize.height + (e.touches[0].clientY - resizePostion.y)
+    if (newWidth < props.data.width && props.data.width > window.outerWidth) {
+      newWidth = props.data.width
+    }
+    if (newWidth > window.outerWidth) {
+      newWidth = window.outerWidth
+    }
+
+    if (newHight < props.data.hight && props.data.hight > DSize[1]) {
+      newHight = props.data.hight
+    }
+    if (newHight > DSize[1]) {
+      newHight = DSize[1]
+    }
+
     if (resizeState == "on") {
       setWindowSize((c) => ({
-        width: initwindowSize.width + (e.touches[0].clientX - resizePostion.x),
-        height: initwindowSize.height + (e.touches[0].clientY - resizePostion.y),
+        width: newWidth,
+        height: newHight,
       }));
     }
+
+
   };
 
   //----------------------------------- resize useEffect -------------------------------
@@ -186,13 +240,28 @@ export default function WindowContaner(props) {
   const DSize = useStore((state) => state.DesktopSize);
   const spwanMargin = useStore((state) => state.spwanMargin);
   const [IconPos, setIconPos] = useState([
-    DSize[0] / 2 - 200,
-    DSize[1] / 2 - 200,
+    (DSize[0] / 2) - (windowSize.width / 2),
+    (DSize[1] / 2) - (windowSize.height / 2),
   ]);
   useEffect(() => {
     setIconPos([IconPos[0] + spwanMargin, IconPos[1] + spwanMargin]);
     // console.log(IconPos, spwanMargin);
   }, []);
+
+  useEffect(() => {
+    if (IconPos[0] < 0) {
+      setIconPos([0, IconPos[1]])
+    }
+    // if (IconPos[0] + windowSize.height > window.outerHeight) {
+    //   setIconPos([window.outerHeight - (windowSize.height), IconPos[1]])
+    // }
+    if (IconPos[1] < 0) {
+      setIconPos([IconPos[1], 0])
+    }
+    // if (IconPos[1] + windowSize.width > window.outerWidth) {
+    //   setIconPos([window.outerWidth - windowSize.width, IconPos[1]])
+    // }
+  }, [IconPos, windowSize])
   const windowsStack = useStore((state) => state.windowsStack);
   const maxIndex = useStore((state) => state.maxIndex);
 
@@ -219,9 +288,23 @@ export default function WindowContaner(props) {
       setIconPos([0, 0]);
     } else {
       setIsMax(false);
-      setinitWindowSize({ width: 400, height: 200 });
-      setWindowSize({ width: 400, height: 200 });
-      setIconPos([DesktopSize[0] / 2 - 400, DesktopSize[1] / 2 - 200]);
+      let newWidth = props.data.width
+      let newHight = props.data.hight
+
+      if (newWidth > window.outerWidth) {
+        newWidth = window.outerWidth
+      }
+
+
+      if (newHight > DSize[1]) {
+        newHight = DSize[1]
+      }
+      setinitWindowSize({ width: newWidth, height: newHight });
+      setWindowSize({ width: newWidth, height: newHight });
+      setIconPos([
+        (DSize[0] / 2) - (newWidth / 2),
+        (DSize[1] / 2) - (newHight / 2),
+      ]);
     }
   };
 
@@ -332,7 +415,7 @@ export default function WindowContaner(props) {
           resizable={!IsMax}
           ref={windowRef}
           className="window"
-          style={windowSize}
+          style={{ ...windowSize, minHeight: 100, minWidth: 100 }}
         >
           <WindowHeader
             active={props.data.index == maxIndex - 1}

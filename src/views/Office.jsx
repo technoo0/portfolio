@@ -2,14 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import ScrollMagic from "scrollmagic";
 import VideoPlayer from "./VideoPlayer";
 import UseObjectFit from "../hooks/UseObjectFit";
-import Arrow from "./Arrow.svg"
+import Arrow from "../assets/images/Arrow.svg"
+import Arrow2 from "../assets/images/newArrow.svg"
 import Aduio from "../assets/win95.mp3";
 export default function Office({ onVideoEnded }) {
   let VideRef = useRef();
-  const BottonPos = UseObjectFit();
+  const BottonPos = UseObjectFit(VideRef);
   const [stepOne, setSepOne] = useState(true);
   const [showbottom, setshowbottom] = useState(true)
   const [ended, setended] = useState(false);
+
+
 
   const OnEnded = () => {
     console.log("Video Ended")
@@ -86,9 +89,12 @@ export default function Office({ onVideoEnded }) {
               // border: "white solid",
               zIndex: 100
             }} ></div>
-          <div style={{ position: "absolute", left: -150, top: -150 }} >
+          {window.innerWidth >= 573 ? <div style={{ position: "absolute", left: -150, top: -150 }} >
             <img src={Arrow} alt="Your SVG" width={200} />
-          </div>
+          </div> : <div style={{ position: "absolute", left: 10, top: -180 }} >
+            <img src={Arrow2} alt="Your SVG" width={200} />
+          </div>}
+
         </div>
 
       )}

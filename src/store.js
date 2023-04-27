@@ -1,7 +1,7 @@
 import create from "zustand";
 
 const useStore = create((set, get) => ({
-  DestopSize: [1920, 937],
+  DesktopSize: [1920, 937],
   maxIndex: 1,
   windowsStack: [],
   spwanMargin: -4,
@@ -13,7 +13,7 @@ const useStore = create((set, get) => ({
       set((state) => ({ spwanMargin: -4 }));
     }
   },
-  AddWindow: (name, content) => {
+  AddWindow: (name, content, hight, width, props = {}) => {
     const AddMatgin = get().AddMatgin;
 
     set((state) => ({
@@ -25,6 +25,9 @@ const useStore = create((set, get) => ({
           index: state.maxIndex,
           minimized: false,
           content: content,
+          hight: hight,
+          width: width,
+          props
         },
       ],
       maxIndex: state.maxIndex + 1,

@@ -1,66 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
-import { WindowContent, Button, Toolbar, Cutout, Panel } from "react95";
-let observer;
+import React from "react";
+import { WindowContent, Button, Toolbar, Panel, Avatar } from "react95";
+import PorfilePhoto from "../../assets/images/PorfilePhoto.jpg"
 export default function AboutMe(props) {
-  const windowRef = useRef()
+    return (
+        <div>
+            <Toolbar>
+                <Button variant="menu" size="sm">
+                    File
+                </Button>
+                <Button variant="menu" size="sm">
+                    Edit
+                </Button>
+                <Button variant="menu" size="sm" >
+                    Save
+                </Button>
+            </Toolbar>
+            <WindowContent >
+                <Avatar src={PorfilePhoto} size={200} />
+                <h1>hi ! i'm Marwan.</h1>
+                <p>I'm enthusiastic, fast learner, and passionate <strong>Full Stack Web Developer</strong>. Eager to learn new <br />
+                    technologies and skills and apply them in the real world. I love solving problems and finding<br />
+                    creative solutions and am always up for new challenges</p>
 
-  const [windowHight, setWindowHight] = useState(0)
-  const onresize = () => {
-    if (windowRef.current) {
-      setWindowHight(windowRef.current.offsetHeight - 120)
-
-    }
-  }
-  useEffect(() => {
-    if (windowRef.current) {
-      observer = new ResizeObserver(onresize)
-      observer.observe(windowRef.current)
-    }
-    return () => {
-
-      if (observer) {
-
-        observer.disconnect()
-        observer = null
-      }
-
-
-    }
-  }, [windowRef.current, windowHight])
-  return (
-    <div style={{ height: "100%" }} ref={windowRef}>
-      <Toolbar>
-        <Button variant="menu" size="sm">
-          File
-        </Button>
-        <Button variant="menu" size="sm">
-          Edit
-        </Button>
-        <Button variant="menu" size="sm">
-          Save
-        </Button>
-      </Toolbar>
-
-
-      <WindowContent style={{ hight: "100%" }}>
-        <Cutout style={{ backgroundColor: "white", height: windowHight != 0 ? windowHight : "200px", overflow: "hidden" }}>
-          <div>
-            <p>React95 is the best UI library ever created</p>
-            <p>React95 is the best UI library ever created</p>
-            <p>React95 is the best UI library ever created</p>
-            <p>React95 is the best UI library ever created</p>
-            <p>React95 is the best UI library ever created</p>
-            <p>React95 is the best UI library ever created</p>
-            <p>React95 is the best UI library ever created</p>
-            <p>React95 is the best UI library ever created</p>
-            <p>React95 is the best UI library ever created</p>
-          </div>
-        </Cutout>
-      </WindowContent>
-      {/* <Panel variant="well" className="footer">
-          Put some useful informations here
-        </Panel> */}
-    </div>
-
-  );
+            </WindowContent>
+            {/* <Panel variant="well" className="footer">
+                Put some useful informations here
+            </Panel> */}
+        </div>
+    );
 }

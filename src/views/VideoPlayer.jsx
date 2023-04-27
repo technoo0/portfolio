@@ -1,12 +1,15 @@
 import React, { memo } from "react";
 import Video from "../assets/video2.mp4";
 const VideoPlayer = memo(({ VideRef }) => {
-  console.log("render");
+  // console.log("render");
   return (
     <video
       ref={VideRef}
       muted="muted"
-      autoPlay
+      autoPlay="autoplay"
+      playsInline
+      defaultMuted
+      preload="auto"
       style={{
         width: "100%",
         height: "100vh",

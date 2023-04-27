@@ -31,8 +31,14 @@ const GetPostion = (width, height) => {
   };
 };
 
-const UseObjectFit = () => {
-  const InitalRes = { width: 3840, height: 2160 };
+const UseObjectFit = (video) => {
+  const [videoHight, setVideoHight] = useState()
+  useEffect(() => {
+    if (video.current) {
+      setVideoHight(video.current.offsetHeight)
+    }
+  }, [])
+  const InitalRes = { width: 1920, height: 1080 };
   const InitalRatio = [16, 9];
   const CompareRatio = (Win, Vid) => {
     if (Win.width / Win.height < Vid.width / Vid.height) {
@@ -51,22 +57,23 @@ const UseObjectFit = () => {
   };
   const WindowInital = {
     width: window.innerWidth,
-    height: window.innerHeight,
+    height: videoHight ? videoHight : window.innerHeight,
   };
   const [BottonPos, setBottonPos] = useState(
     CompareRatio(WindowInital, InitalRes)
   );
   useEffect(() => {
     const UpdatePos = (e) => {
+      console.log(e)
       const WindowCurrent = {
-        width: e.target.innerWidth,
-        height: e.target.innerHeight,
+        width: e.target.offsetWidth,
+        height: e.target.offsetHeight,
       };
       setBottonPos(CompareRatio(WindowCurrent, InitalRes));
     };
-    window.addEventListener("resize", UpdatePos);
+    video.current.addEventListener("resize", UpdatePos);
     return () => {
-      window.removeEventListener("resize", UpdatePos);
+      video.current.removeEventListener("resize", UpdatePos);
     };
   }, []);
   return BottonPos;

@@ -15,6 +15,7 @@ const Home = () => {
   const DesktopRef = useRef(null);
 
   const Lisner = () => {
+    console.log(DesktopRef.current.offsetWidth)
     useStore.setState({
       DesktopSize: [
         DesktopRef.current.offsetWidth,

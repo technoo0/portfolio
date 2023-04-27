@@ -8,28 +8,13 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 import Window from "./windows/window";
 
 import AppsList from "../../apps/appsList";
-import Skills from "../../apps/Skills/Skills";
-import AboutMe from "../../apps/AboutMe/AboutMe";
+
 
 export default function Desktop({ Dref }) {
-  const Componants = {
-    Skills: <Skills />,
-    AboutMe: <AboutMe />,
-  };
+
   const windowsStack = useStore((state) => state.windowsStack);
 
-  const Items = [
-    {
-      id: 0,
-      name: "My Computer",
-      logo: mycomputerIcon,
-    },
-    {
-      id: 1,
-      name: "Recycle Bin",
-      logo: Trash,
-    },
-  ];
+
   return (
     <div
       ref={Dref}
@@ -62,13 +47,16 @@ export default function Desktop({ Dref }) {
               logo={item.logo}
               id={item.id}
               content={item.content}
+              hight={item.initalHight}
+              width={item.initalWidth}
+
             />
           </div>
         ))}
       </ResponsiveGridLayout>
       {windowsStack.map((item, key) => (
         <Window key={key} data={item}>
-          <item.content />
+          <item.content {...item.props} />
         </Window>
       ))}
     </div>
