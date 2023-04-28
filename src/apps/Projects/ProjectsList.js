@@ -7,6 +7,8 @@ import AstroIcon from "../../assets/images/AstrolabeIcon.png"
 import Astrolabe from "./Astrolabe";
 import ChessIcon from "../../assets/images/ChessBulbLogo.png"
 import ChessBulb from "./ChessBulb";
+import Leviathan from "./Leviathan";
+import LeviathanLogo from "../../assets/images/LeviathanLogo.png"
 const Items = [
     {
 
@@ -46,6 +48,16 @@ const Items = [
         initalHight: 400,
         initalWidth: 400,
         text: " A social media platform for chess players"
+
+    },
+    {
+
+        name: "Leviathan",
+        content: Leviathan,
+        icon: LeviathanLogo,
+        initalHight: 400,
+        initalWidth: 400,
+        text: "build the Stabilty and the Control System for an ROV (remotely operated vehicle)"
 
     },
 
