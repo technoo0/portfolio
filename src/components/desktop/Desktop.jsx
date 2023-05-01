@@ -13,6 +13,10 @@ import AppsList from "../../apps/appsList";
 export default function Desktop({ Dref }) {
 
   const windowsStack = useStore((state) => state.windowsStack);
+  const AddWindow = useStore((state) => state.AddWindow);
+  useEffect(() => {
+    AddWindow(AppsList[0].name, AppsList[0].content, AppsList[0].initalHight, AppsList[0].initalWidth)
+  }, [])
 
 
   return (

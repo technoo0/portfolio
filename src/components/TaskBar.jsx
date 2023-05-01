@@ -11,14 +11,20 @@ import {
   Divider,
 } from "react95";
 import logoIMG from "../assets/images/logo.png";
+import globeIcon from "../assets/icons/globeIcon.png";
+import mycomputerIcon from "../assets/icons/mycomputerIcon.png";
 import TimeWidget from "./TimeWidget";
 
-export default function TaskBar({}) {
+import AppsList from "../apps/appsList";
+export default function TaskBar({ }) {
   const [open, setOpen] = React.useState(false);
   const IconRef = useRef();
   const ToolbarRef = useRef();
   const [ShowName, setShowName] = useState(true);
   const windowsStack = useStore((state) => state.windowsStack);
+
+  const AddWindow = useStore((state) => state.AddWindow);
+
   useEffect(() => {
     const Resize = () => {
       if (IconRef.current && IconRef.current.children[0]) {
@@ -35,6 +41,18 @@ export default function TaskBar({}) {
       window.removeEventListener("resize", Resize);
     };
   }, [windowsStack]);
+
+  const AddAboutMe = () => {
+    AddWindow(AppsList[0].name, AppsList[0].content, AppsList[0].initalHight, AppsList[0].initalWidth)
+  }
+  const AddContact = () => {
+    AddWindow(AppsList[3].name, AppsList[3].content, AppsList[3].initalHight, AppsList[3].initalWidth)
+  }
+
+  const Handelshutdown = () => {
+    localStorage.removeItem("intro");
+    location.reload();
+  }
 
   const maxIndex = useStore((state) => state.maxIndex);
   const MoveToTop = useStore((state) => state.MoveToTop);
@@ -81,24 +99,24 @@ export default function TaskBar({}) {
             }}
             onClick={() => setOpen(false)}
           >
-            <ListItem>
+            <ListItem onClick={AddAboutMe}>
               <span role="img" aria-label="👨‍💻">
-                👨‍💻
+                <img src={globeIcon} alt="" height={20} />
               </span>
-              Profile
+              About Me
             </ListItem>
-            <ListItem>
+            <ListItem onClick={AddContact}>
               <span role="img" aria-label="📁">
-                📁
+                <img src={mycomputerIcon} alt="" height={20} style={{ marginRight: 10 }} />
               </span>
-              My account
+              Contact Me
             </ListItem>
             <Divider />
-            <ListItem disabled>
+            <ListItem onClick={Handelshutdown}>
               <span role="img" aria-label="🔙">
-                🔙
+                🛑
               </span>
-              Logout
+              Shutdown
             </ListItem>
           </List>
         )}
