@@ -92,7 +92,7 @@ const Tools = [
 
 
 export default function ToolsMune({ setTool }) {
-    const [currentTool, setCurrentTool] = useState(0)
+    const [currentTool, setCurrentTool] = useState(6)
     return (
         <div style={{
             display: "grid",
