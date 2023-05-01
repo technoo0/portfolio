@@ -7,22 +7,31 @@ export default function Paint(props) {
     const windowRef = useRef()
 
     const [windowHight, setWindowHight] = useState(0)
-
+    const [Tool, setTool] = useState('Pencil')
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
+    const [CanvasSize, SetCanvasSize] = useState({ width: 500, height: 500 })
     const [isDrawing, setIsDrawing] = useState(false);
     const [lineWidth, setLineWidth] = useState(5);
     const [lineColor, setLineColor] = useState("black");
 
+    useEffect(() => {
+        if (ctxRef.current) {
+
+            if (Tool == "Eraser") {
+                ctxRef.current.strokeStyle = "white";
+            } else {
+                ctxRef.current.strokeStyle = lineColor
+            }
+        }
+    }, [Tool, lineColor])
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
-
-        ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
         ctxRef.current = ctx;
-    }, [lineColor, lineWidth]);
+    }, [lineWidth]);
 
     // Function for starting the drawing
     const startDrawing = (e) => {
@@ -31,6 +40,13 @@ export default function Paint(props) {
             e.nativeEvent.offsetX,
             e.nativeEvent.offsetY
         );
+        if (Tool == "Fill") {
+            FillCanvas()
+        } else if (Tool == "Pick") {
+            ColorPick(e)
+        } else if (Tool == "Zoom") {
+            Zoom()
+        }
         setIsDrawing(true);
     };
 
@@ -39,17 +55,103 @@ export default function Paint(props) {
         ctxRef.current.closePath();
         setIsDrawing(false);
     };
+    const Spray = function (e) {
 
-    const draw = (e) => {
-        if (!isDrawing) {
-            return;
+        ctxRef.current.fillStyle = lineColor;
+        ctxRef.current.rect(e.nativeEvent.offsetX, e.nativeEvent.offsetY, 1, 1);
+
+        for (var i = 20; i--;) {
+            ctxRef.current.rect(e.nativeEvent.offsetX + Math.random() * 20 - 10,
+                e.nativeEvent.offsetY + Math.random() * 20 - 10, 1, 1);
+            ctxRef.current.fill();
         }
+
+
+    };
+
+    // Color Pick Functions 
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+    function rgbToHex(r, g, b) {
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+    const ColorPick = (e) => {
+        var c = ctxRef.current.getImageData(e.nativeEvent.offsetX, e.nativeEvent.offsetY, 1, 1).data;
+        var color = rgbToHex(c[0], c[1], c[2])
+        setLineColor(color)
+    }
+
+
+    const Pencil = (e) => {
+        setLineWidth(1)
         ctxRef.current.lineTo(
             e.nativeEvent.offsetX,
             e.nativeEvent.offsetY
         );
 
         ctxRef.current.stroke();
+    }
+
+
+    const Eraser = (e) => {
+        setLineWidth(10)
+
+        ctxRef.current.lineTo(
+            e.nativeEvent.offsetX,
+            e.nativeEvent.offsetY
+        );
+
+        ctxRef.current.stroke();
+    }
+    const Brush = (e) => {
+        setLineWidth(10)
+        ctxRef.current.lineTo(
+            e.nativeEvent.offsetX,
+            e.nativeEvent.offsetY
+        );
+
+        ctxRef.current.stroke();
+    }
+
+    const FillCanvas = () => {
+        ctxRef.current.fillStyle = lineColor
+        ctxRef.current.fillRect(0, 0, CanvasSize.width, CanvasSize.height);
+        ctxRef.current.fill();
+    }
+    const Zoom = () => {
+        if (CanvasSize.width == 500) {
+
+            SetCanvasSize({
+                width: 1000,
+                height: 1000
+            })
+        } else {
+            SetCanvasSize({
+                width: 500,
+                height: 500
+            })
+        }
+    }
+
+    const draw = (e) => {
+        if (!isDrawing) {
+            return;
+        }
+
+        if (Tool == "Pencil") {
+            Pencil(e)
+        } else if (Tool == "Spray") {
+            Spray(e)
+        } else if (Tool == "Brush") {
+            Brush(e)
+        } else if (Tool == "Eraser") {
+            Eraser(e)
+        } else if (Tool == "Fill") {
+            FillCanvas()
+        }
+
     };
 
 
@@ -75,6 +177,7 @@ export default function Paint(props) {
 
         }
     }, [windowRef.current, windowHight])
+
     return (
         <div style={{ height: "100%" }} ref={windowRef}>
             <Toolbar>
@@ -93,7 +196,7 @@ export default function Paint(props) {
             <WindowContent style={{ hight: "100%", width: "100%", padding: 0 }}>
                 <div style={{ hight: "100%", width: "100%", display: "flex", gap: 5 }}>
 
-                    <ToolsMune />
+                    <ToolsMune setTool={setTool} />
                     <Cutout style={{ backgroundColor: "gray", height: windowHight != 0 ? windowHight : "200px", width: "100%", overflow: "hidden", marginBottom: 10 }}>
 
                         <canvas
@@ -101,13 +204,13 @@ export default function Paint(props) {
                             onMouseUp={endDrawing}
                             onMouseMove={draw}
                             ref={canvasRef}
-                            width={`500px`}
-                            height={`500px`}
+                            width={CanvasSize.width}
+                            height={CanvasSize.height}
                             style={{ backgroundColor: "white" }}
                         />
                     </Cutout>
                 </div>
-                <ColorPicker setLineColor={setLineColor} />
+                <ColorPicker setLineColor={setLineColor} lineColor={lineColor} />
             </WindowContent>
             {/* <Panel variant="well" className="footer">
           Put some useful informations here

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Frame } from 'react95'
 
 const Colors = [
@@ -70,8 +70,12 @@ const Colors = [
 
 
 
-export default function ({ setLineColor }) {
-    const [currentColor, SetCurrentColor] = useState("#000000")
+export default function ({ setLineColor, lineColor }) {
+
+    const [currentColor, SetCurrentColor] = useState(lineColor)
+    useEffect(() => {
+        SetCurrentColor(lineColor)
+    }, [lineColor])
     return (
         <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
             <Frame style={{ height: 70, width: 70, }} variant='well'>

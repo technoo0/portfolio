@@ -16,37 +16,37 @@ const Tools = [
     {
         "title": "Eraser/Color Eraser",
         "disable": false,
-        "handler": null
+        "handler": "Eraser"
     },
     {
         "title": "Fill With Color",
         "disable": false,
-        "handler": null
+        "handler": "Fill"
     },
     {
         "title": "Pick Color",
         "disable": false,
-        "handler": null
+        "handler": "Pick"
     },
     {
         "title": "Magnifier",
         "disable": false,
-        "handler": null
+        "handler": "Zoom"
     },
     {
         "title": "Pencil",
         "disable": false,
-        "handler": null
+        "handler": "Pencil"
     },
     {
         "title": "Brush",
         "disable": false,
-        "handler": null
+        "handler": "Brush"
     },
     {
         "title": "Airbrush",
         "disable": false,
-        "handler": null
+        "handler": "Spray"
     },
     {
         "title": "Text",
@@ -91,7 +91,7 @@ const Tools = [
 
 
 
-export default function ToolsMune() {
+export default function ToolsMune({ setTool }) {
     const [currentTool, setCurrentTool] = useState(0)
     return (
         <div style={{
@@ -102,7 +102,10 @@ export default function ToolsMune() {
             gridAutoFlow: "column"
         }}>
             {Tools.map((tool, index) => (
-                <Button onClick={() => setCurrentTool(index)} active={index == currentTool} disabled={tool.disable} style={{ background: tool.disable ? "gray" : "" }}>
+                <Button
+                    onClick={() => { setCurrentTool(index); setTool(tool.handler) }}
+                    active={index == currentTool} disabled={tool.disable}
+                    style={{ background: tool.disable ? "gray" : "" }}>
                     <span style={{ height: 16, width: 16, background: `url(${IconBackGround})`, backgroundRepeat: "no-repeat", backgroundPosition: `calc(-16px * ${index}) 0` }}></span>
                 </Button>
             ))}
