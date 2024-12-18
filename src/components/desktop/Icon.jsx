@@ -45,8 +45,7 @@ export default function Icon({ name, logo, content, hight, width }) {
 
   return (
     <div
-      ref={ElementRef}
-      onDoubleClick={() => AddWindow(name, content, hight, width)}
+      onClick={()=> AddWindow(name, content, hight, width)}
       style={{
         display: "flex",
         flexDirection: "column",
